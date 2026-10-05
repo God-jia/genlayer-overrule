@@ -54,6 +54,23 @@ Per-platform statistics read back from the contract:
 { "issued": 1, "adjudicated": 1, "upheld": 0, "overturned": 1, "remanded": 0 }
 ```
 
+## Demo
+
+A 30-second walkthrough of the full lifecycle on studionet —
+[`docs/overrule-demo.mp4`](docs/overrule-demo.mp4):
+
+1. publish a rulebook, issue a decision against a user
+2. the subject files their single appeal
+3. anyone triggers adjudication; validators re-read the frozen rulebook and the live
+   content, and the contract derives `overturned`
+4. the platform's on-chain overturn rate updates
+
+It is rebuilt from captured dApp screenshots with:
+
+```bash
+python tools/make_demo.py
+```
+
 ## Why this needs GenLayer
 
 A moderation appeal has two halves, and a normal smart contract can only do one of them.
@@ -137,6 +154,8 @@ tests/direct/test_overrule.py    19 direct-mode unit tests
 docs/index.html                  the dApp (served by GitHub Pages)
 docs/styles.css
 docs/app.js                      genlayer-js wiring
+docs/overrule-demo.mp4           recorded lifecycle walkthrough
+tools/make_demo.py               builds the walkthrough video
 gltest.config.yaml
 requirements.txt
 ```
