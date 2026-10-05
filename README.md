@@ -17,6 +17,7 @@ and the contract derives the outcome **in code**.
 |---|---|
 | Contract | [`0x76D56AA824a00B3378c3ADB49224fdFb0376F46c`](https://explorer-studio.genlayer.com/address/0x76D56AA824a00B3378c3ADB49224fdFb0376F46c) |
 | Network | studionet (chain ID 61999) |
+| dApp | <https://god-jia.github.io/genlayer-overrule/> |
 | Deploy tx | [`0x997b858a…05c29195`](https://explorer-studio.genlayer.com/tx/0x997b858ab5ac4f3721310e920499ffe525ce19d273c2a77f6649d10a05c29195) |
 
 The full lifecycle has been executed against studionet with real validators, a real web
@@ -205,6 +206,8 @@ console.log(receipt.txDataDecoded.contractAddress);
 ```
 
 ## Using the dApp
+
+A hosted copy runs at <https://god-jia.github.io/genlayer-overrule/>. To run it locally:
 
 ```bash
 cd web
