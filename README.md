@@ -134,9 +134,9 @@ re-read later and check.
 ```
 contracts/overrule.py            the Intelligent Contract
 tests/direct/test_overrule.py    19 direct-mode unit tests
-web/index.html                   the dApp
-web/styles.css
-web/app.js                       genlayer-js wiring
+docs/index.html                  the dApp (served by GitHub Pages)
+docs/styles.css
+docs/app.js                      genlayer-js wiring
 gltest.config.yaml
 requirements.txt
 ```
@@ -207,10 +207,11 @@ console.log(receipt.txDataDecoded.contractAddress);
 
 ## Using the dApp
 
-A hosted copy runs at <https://god-jia.github.io/genlayer-overrule/>. To run it locally:
+A hosted copy runs at <https://god-jia.github.io/genlayer-overrule/> (served from the
+`docs/` folder of this repository). To run it locally:
 
 ```bash
-cd web
+cd docs
 python -m http.server 8080
 ```
 
