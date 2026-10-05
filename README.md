@@ -19,6 +19,8 @@ and the contract derives the outcome **in code**.
 | Network | studionet (chain ID 61999) |
 | dApp | <https://god-jia.github.io/genlayer-overrule/> |
 | Deploy tx | [`0x997b858a…05c29195`](https://explorer-studio.genlayer.com/tx/0x997b858ab5ac4f3721310e920499ffe525ce19d273c2a77f6649d10a05c29195) |
+| Demo | [`docs/overrule-demo.mp4`](docs/overrule-demo.mp4) — 30s lifecycle walkthrough |
+| Announcement | <https://x.com/hafterl1fe/status/2107224052448514199> |
 
 The full lifecycle has been executed against studionet with real validators, a real web
 fetch, and a real LLM round:
