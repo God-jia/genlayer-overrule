@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Overrule — an on-chain appeal court for content moderation</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="mark">OR</div>
+    <div>
+      <h1>Overrule</h1>
+      <p class="tagline">An on-chain appeal court for content-moderation decisions</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <label class="field inline">
+      <span>Network</span>
+      <select id="network"></select>
+    </label>
+    <button id="connect" class="btn primary">Connect wallet</button>
+  </div>
+</header>
+
+<section class="addressbar">
+  <label class="field grow">
+    <span>Overrule contract address</span>
+    <input id="contract" placeholder="0x… deployed Overrule contract" spellcheck="false" />
+  </label>
+  <button id="saveContract" class="btn">Save</button>
+  <span id="contractState" class="pill">not set</span>
+  <span id="walletState" class="pill">wallet: not connected</span>
+</section>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="platform">Platform console</button>
+  <button class="tab" data-tab="appeal">Appeal</button>
+  <button class="tab" data-tab="adjudicate">Adjudicate</button>
+  <button class="tab" data-tab="transparency">Transparency</button>
+</nav>
+
+<main>
+  <div id="log" class="log" hidden></div>
+
+  <!-- ------------------------------------------------------------ platform -->
+  <section class="panel" id="panel-platform">
+    <div class="grid">
+      <article class="card">
+        <h2>1. Publish a rulebook</h2>
+        <p class="hint">
+          The rulebook is written on-chain once and never changes. Every later
+          decision cites rule ids from it, so the standard an appeal is judged
+          against cannot be edited after the fact.
+        </p>
+        <label class="field">
+          <span>Rulebook name</span>
+          <input id="rbName" value="Community Guidelines v1" />
+        </label>
+        <label class="field">
+          <span>Rules (JSON array)</span>
+          <textarea id="rbRules" rows="12" spellcheck="false"></textarea>
+        </label>
+        <button id="publishRulebook" class="btn primary">Publish rulebook</button>
+        <output id="rbOut" class="out"></output>
+      </article>
+
+      <article class="card">
+        <h2>2. Issue a decision</h2>
+        <p class="hint">
+          A platform action against a user, citing rules from a rulebook the
+          same wallet published. The content URL is what validators will
+          re-read during an appeal.
+        </p>
+        <div class="row">
+          <label class="field"><span>Rulebook id</span><input id="dRulebook" value="0" /></label>
+          <label class="field"><span>Action</span>
+            <select id="dAction">
+              <option value="warn">warn</option>
+              <option value="remove" selected>remove</option>
+              <option value="suspend">suspend</option>
+              <option value="ban">ban</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Subject (user address)</span>
+          <input id="dSubject" placeholder="0x…" spellcheck="false" />
+        </label>
+        <div class="row">
+          <label class="field"><span>Case reference</span><input id="dCaseRef" value="MOD-2026-1042" /></label>
+          <label class="field"><span>Cited rule ids (comma separated)</span><input id="dRules" value="H1" /></label>
+        </div>
+        <label class="field">
+          <span>Content URL</span>
+          <input id="dUrl" spellcheck="false" />
+        </label>
+        <label class="field">
+          <span>Stated reason</span>
+          <textarea id="dReason" rows="3"></textarea>
+        </label>
+        <button id="issueDecision" class="btn primary">Issue decision</button>
+        <output id="dOut" class="out"></output>
+      </article>
+    </div>
+  </section>
+
+  <!-- -------------------------------------------------------------- appeal -->
+  <section class="panel" id="panel-appeal" hidden>
+    <article class="card">
+      <h2>Appeal a decision</h2>
+      <p class="hint">
+        Only the wallet named as the subject can appeal, and only once. The
+        appeal argument and any evidence URLs are stored on-chain and shown to
+        the validators.
+      </p>
+      <div class="row">
+        <label class="field"><span>Decision id</span><input id="aId" value="0" /></label>
+        <button id="loadDecision" class="btn">Load decision</button>
+      </div>
+      <div id="aView" class="record"></div>
+      <label class="field">
+        <span>Appeal argument (at least 40 characters)</span>
+        <textarea id="aArgument" rows="4"></textarea>
+      </label>
+      <label class="field">
+        <span>Evidence URLs (one per line, up to 4)</span>
+        <textarea id="aEvidence" rows="3" spellcheck="false"></textarea>
+      </label>
+      <button id="appeal" class="btn primary">Submit appeal</button>
+      <output id="aOut" class="out"></output>
+    </article>
+  </section>
+
+  <!-- ---------------------------------------------------------- adjudicate -->
+  <section class="panel" id="panel-adjudicate" hidden>
+    <article class="card">
+      <h2>Adjudicate an appealed decision</h2>
+      <p class="hint">
+        Anyone may trigger adjudication once an appeal exists. Validators
+        re-read the frozen rulebook and the live content and classify each cited
+        rule. The outcome is derived in code, so the model never picks it.
+      </p>
+      <div class="row">
+        <label class="field"><span>Decision id</span><input id="jId" value="0" /></label>
+        <button id="loadAppealed" class="btn">Load</button>
+        <button id="adjudicate" class="btn primary">Adjudicate</button>
+      </div>
+      <div id="jView" class="record"></div>
+    </article>
+  </section>
+
+  <!-- -------------------------------------------------------- transparency -->
+  <section class="panel" id="panel-transparency" hidden>
+    <article class="card">
+      <h2>Platform transparency</h2>
+      <p class="hint">
+        Every adjudicated appeal is counted against the platform that issued the
+        decision. An overturn rate is the number a user cannot get from the
+        platform today.
+      </p>
+      <div class="row">
+        <label class="field grow"><span>Platform address</span>
+          <input id="tAddress" placeholder="0x…" spellcheck="false" />
+        </label>
+        <button id="loadStats" class="btn">Load</button>
+      </div>
+      <div id="tView" class="record"></div>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <span>Overrule · GenLayer Intelligent Contract · adjudication recorded on-chain, enforcement off-chain</span>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
